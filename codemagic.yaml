@@ -1,32 +1,27 @@
 workflows:
   ios-release-build:
-    name: Ibong Adarna iOS Release
-    max_build_duration: 120
+    name: Ibong Adarna iOS Build (Unsigned)
+    max_build_duration: 30
     instance_type: mac_mini_m1
     environment:
       flutter: stable
       xcode: latest
       cocoapods: default
-      groups:
-        - app_store_credentials
     scripts:
-      - name: Set up code signing settings on Xcode project
-        script: |
-          xcode-project use-profiles
       - name: Fetch Flutter dependencies
         script: |
           flutter pub get
       - name: Install CocoaPods
         script: |
           cd ios && pod install
-      - name: Build iOS IPA
+      - name: Build Unsigned iOS Bundle
         script: |
-          flutter build ipa --release \
-            --export-options-plist=/Users/builder/export_options.plist
+          flutter build ios --release --no-codesign
+      - name: Compress into Unsigned IPA
+        script: |
+          cd build/ios/iphoneos
+          mkdir Payload
+          mv Runner.app Payload/
+          zip -r Runner.ipa Payload
     artifacts:
-      - build/ios/ipa/*.ipa
-      - /tmp/xcodebuild_logs/*.log
-    publishing:
-      app_store_connect:
-        auth: integration
-        submit_to_testflight: true
+      - build/ios/iphoneos/Runner.ipa
