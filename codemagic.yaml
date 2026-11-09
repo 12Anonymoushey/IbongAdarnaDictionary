@@ -13,5 +13,8 @@ workflows:
           mkdir Payload
           mv Runner.app Payload/
           zip -r Runner.ipa Payload
-    artifacts:
-      - build/ios/iphoneos/Runner.ipa
+artifacts:
+  - build/ios/ipa/*.ipa
+  - build/ios/iphoneos/*.app
+  - build/ios/iphonesimulator/*.app
+  - $HOME/Library/Developer/Xcode/DerivedData/**/Build/Products/*-iphonesimulator/*.app
