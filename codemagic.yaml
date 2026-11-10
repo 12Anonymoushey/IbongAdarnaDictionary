@@ -5,16 +5,9 @@ workflows:
     environment:
       flutter: stable
     scripts:
-      - name: Build Unsigned IPA
+      - name: Build Unsigned iOS App
         script: |
           flutter pub get
           flutter build ios --release --no-codesign
-          cd build/ios/iphoneos
-          mkdir Payload
-          mv Runner.app Payload/
-          zip -r Runner.ipa Payload
-artifacts:
-  - build/ios/ipa/*.ipa
-  - build/ios/iphoneos/*.app
-  - build/ios/iphonesimulator/*.app
-  - $HOME/Library/Developer/Xcode/DerivedData/**/Build/Products/*-iphonesimulator/*.app
+    artifacts:
+      - build/ios/iphoneos/*.app
