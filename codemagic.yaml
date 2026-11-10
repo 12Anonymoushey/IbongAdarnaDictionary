@@ -1,13 +1,15 @@
 workflows:
-  ios-release-build:
-    name: Ibong Adarna iOS Build
+  ios-simulator-build:
+    name: Ibong Adarna iOS Simulator Build
     instance_type: mac_mini_m1
     environment:
       flutter: stable
     scripts:
-      - name: Build Unsigned iOS App
+      - name: Build iOS Simulator App
         script: |
           flutter pub get
-          flutter build ios --release --no-codesign
+          flutter build ios --simulator --no-codesign
+          cd build/ios/iphonesimulator
+          zip -r Runner.app.zip Runner.app
     artifacts:
-      - build/ios/iphoneos/*.app
+      - build/ios/iphonesimulator/Runner.app.zip
